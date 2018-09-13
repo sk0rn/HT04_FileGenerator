@@ -61,7 +61,7 @@ public class DataGen {
             if (virguleProb == 3 && i != 0 && i  != wordsNum -1 ) {
                 sb.append(',');
             }
-            // В конеце предложения нет пробела
+            // В конце предложения нет пробела
             if (i != wordsNum -1 ) {
                 sb.append(" ");
             }
