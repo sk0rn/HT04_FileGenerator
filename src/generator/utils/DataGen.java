@@ -1,4 +1,4 @@
-package generator;
+package generator.utils;
 
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
@@ -11,38 +11,36 @@ public class DataGen {
     private static Random random = new Random();
 
 
-    public void getFiles(String path, int n, int size, String[] words, int probability) {
-
-        for (int i = 1; i <= n; i++) {
-            String data = genText(size, words, probability);
-
-            try(FileOutputStream fileStream = new FileOutputStream(path + "file" + i + ".dat");
-                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileStream)) {
-                byte[] buffer = data.getBytes();
-                bufferedOutputStream.write(buffer);
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private static String genText(int size, String[] words, int probability) {
+    public void getFiles(String path, int n, int min, int max, int diff, String[] words, int probability) {
+        byte[] buffer;
         StringBuilder sb = new StringBuilder();
-        int sentences = (random.nextInt(20) + 1);
-        for (int i = 1; i <= size; i++) {
-            sb.append(genSentence(words, probability));
-            if (i % sentences == 0) { // абзац
-                sb.append("\r\n");
+        SizeGen sizeGen = new SizeGen();
+        int[] sizes = sizeGen.getSizes(n, min, max, diff);
+        int sizeIndex = 0;
+        for (int i = 1; i <= n; i++) {
+            try (FileOutputStream fileStream = new FileOutputStream(path + "file" + i + ".dat");
+                 BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileStream)) {
+
+                int sentences = (random.nextInt(20) + 1);
+                for (int j = 1; j <= sizes[sizeIndex]; j++) {
+                    sb.append(genSentence(words, probability));
+                    if (j % sentences == 0) { // абзац
+                        sb.append("\r\n");
+                    }
+                    buffer = sb.toString().getBytes();
+                    bufferedOutputStream.write(buffer);
+                    sb.delete(0, sb.length());
+                }
+                sizeIndex++;
+
+            }  catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        return sb.toString();
-
     }
 
-    private static String genSentence(String[] words, int probability) {
+
+    private String genSentence(String[] words, int probability) {
         StringBuilder sb = new StringBuilder();
         boolean wordAdded = false;
         int wordsNum = (random.nextInt(15) + 1);
@@ -58,11 +56,11 @@ public class DataGen {
             }
             // Случайная запятая после слова
             int virguleProb = random.nextInt(6);
-            if (virguleProb == 3 && i != 0 && i  != wordsNum -1 ) {
+            if (virguleProb == 3 && i != 0 && i != wordsNum - 1) {
                 sb.append(',');
             }
             // В конце предложения нет пробела
-            if (i != wordsNum -1 ) {
+            if (i != wordsNum - 1) {
                 sb.append(" ");
             }
 
@@ -72,7 +70,7 @@ public class DataGen {
         return sb.toString();
     }
 
-    private static String genWord() {
+    private String genWord() {
         StringBuilder sb = new StringBuilder();
         int wordNum = (random.nextInt(15) + 1);
         for (int i = 0; i < wordNum; i++) {
@@ -81,8 +79,8 @@ public class DataGen {
         return sb.toString();
     }
 
-    private static String genEnd() {
-        char[] chars = {'.', '!', '?' };
+    private String genEnd() {
+        char[] chars = {'.', '!', '?'};
         int index = random.nextInt(3);
         return chars[index] + " ";
 
@@ -95,7 +93,6 @@ public class DataGen {
         }
         return words;
     }
-
 
 
 }
