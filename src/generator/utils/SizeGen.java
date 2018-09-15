@@ -37,8 +37,6 @@ public class SizeGen {
         if (n % 2 != 0) {
             array[half] = bound1;
         }
-
-        Arrays.sort(array);
         return array;
     }
 
@@ -46,25 +44,21 @@ public class SizeGen {
         int bound = (min + max) / 2;
         int half = n / 2;
 
-        int k1;
-        int k2;
+        int k;
         int r1;
         int r2;
 
         int[] array = new int[n];
         for (int i = 1, j = n; i <= half; i++, j--) {
-            k1 = (int) (((double) i / (double) half) * (max - bound)) + 1;
-            k2 = (int) (((double) i / (double) half) * (max - bound));
-            r1 = random.nextInt(k1) + min;
-            r2 = random.nextInt(k2 + 1) + max - k2;
+            k = (int) (((double) i / (double) half) * (max - bound)) + 1;
+            r1 = random.nextInt(k) + min;
+            r2 = random.nextInt(k) + max - (k-1);
             array[j - 1] = r2;
             array[i - 1] = r1;
         }
         if (n % 2 != 0) {
             array[half] = (random.nextInt(2) == 0) ? min : max;
         }
-
-        Arrays.sort(array);
         return array;
     }
 
