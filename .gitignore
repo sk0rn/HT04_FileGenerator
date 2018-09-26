@@ -28,3 +28,6 @@ hs_err_pid*
 
 # generated data
 *.dat
+
+# maven conf
+pom.xml
