@@ -29,5 +29,8 @@ hs_err_pid*
 # generated data
 *.dat
 
+# old tests
+/src/main/java/generator/SizeGenDemo.java
+
 # maven conf
 pom.xml
