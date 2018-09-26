@@ -1,6 +1,7 @@
 package generator.utils;
 
 import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -10,7 +11,11 @@ public class DataGen {
     private static Random random = new Random();
 
 
-    public void getFiles(String path, int n, int min, int max, int diff, String[] words, int probability) {
+    public void getFiles(String path, int n, int min, int max, int diff, String[] words, int probability)
+            throws FileNotFoundException {
+        if (min > max) {
+            throw new IllegalArgumentException("min must be >= max");
+        }
         byte[] buffer;
         StringBuilder sb = new StringBuilder();
         SizeGen sizeGen = new SizeGen();
@@ -32,7 +37,10 @@ public class DataGen {
                 }
                 sizeIndex++;
 
-            }  catch (IOException e) {
+            } catch (FileNotFoundException fne) {
+                fne.printStackTrace();
+                throw new FileNotFoundException();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -92,6 +100,5 @@ public class DataGen {
         }
         return words;
     }
-
 
 }

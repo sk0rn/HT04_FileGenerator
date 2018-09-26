@@ -7,6 +7,9 @@ public class SizeGen {
     private final static Random random = new Random();
 
     public int[] getSizes(int n, int min, int max, int diff) {
+        if (min > max) {
+            throw new IllegalArgumentException("min must be >= max");
+        }
         switch (diff) {
             case 1 : return randomDistrib(n, min, max);
             case 2 : return mirrorParabola(n, min, max);
@@ -30,7 +33,7 @@ public class SizeGen {
             r1 = random.nextInt(bound2 - (bound1 - k)) + bound1 - k;
             r2 = random.nextInt(bound2 + k - bound1) + bound1;
             array[j - 1] = r2;
-            array[i - 1] = r1;
+            array[i - 1] = ((min + max)  % 2 != 0)? r1+1 : r1;
         }
         if (n % 2 != 0) {
             array[half] = bound1;
